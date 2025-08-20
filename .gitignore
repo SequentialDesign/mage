@@ -39,3 +39,6 @@ build/*
 
 TODO
 artifacts/
+
+.helix/recent-files.txt
+
