@@ -1,81 +1,15 @@
-# Lem is a general-purpose editor/IDE extensible in Common Lisp.
+# Mage is my personal fork of LEM, the best program ever !
 
-![](https://raw.githubusercontent.com/Shinmera/lem-icon/gh-pages/icon-blue.svg)
+personal project, not fit for mass use
 
-![Build Status](https://github.com/lem-project/lem/workflows/CI/badge.svg)
-[![Backers on Open Collective](https://opencollective.com/lem/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/lem/sponsors/badge.svg)](#sponsors)
-[![GitHub Sponsors](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub-Sponsors)](https://github.com/sponsors/cxxxr)
+## check out LEM's official page
+[Official LEM Repo](https://https://github.com/lem-project/lem)
 
-Many languages are supported with Lem's **built-in LSP support**.
+### reasons for my fork
 
-After installing lem, you can start developing in Common Lisp and extend the editor while it runs.
+i like how the sdl2 version looks and works on my machine.  'twould be cool to port the sdl2 frontend to sdl3, but right now i just want to experiment with other features and have some stability.  LEM's development is moving a little too fast for me right now, and i want more stability.
 
-Other features include:
-
-- Emacs and Vim modes
-- ncurses and SDL2 interfaces
-- a **project explorer** tree view
-- **project**-aware commands
-- interactive **grep** and **git** interfaces
-- **multiple cursors**
-- **terminal integration** with libvterm
-- keyboard macros
-- **tetris**
-- and more…
-
-## Install
-
-With Docker (ncurses version):
-
-    $ docker run --rm -it ghcr.io/lem-project/lem:latest
-
-### Lem-ncurses
-- [GNU/Linux](https://lem-project.github.io/installation/ncurses/linux/)
-- [MacOS](https://lem-project.github.io/installation/ncurses/macos/)
-- [Windows](https://lem-project.github.io/installation/ncurses/windows/)
-
-### Lem-sdl2
-- [GNU/Linux](https://lem-project.github.io//installation/sdl2/linux/)
-- [MacOS](https://lem-project.github.io//installation/sdl2/macos/)
-- [Windows](https://lem-project.github.io//installation/sdl2/windows/)
-
-
-## Screenshots
-![Terminal](screenshots/terminal.png)　　
-
-![Sdl2](screenshots/sdl2.png)　　
-
-## Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute]](CONTRIBUTING.md).
-
-<a href="https://github.com/lem-project/lem/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lem-project/lem&max=24" />
-</a>
-
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/lem#backer)]
-
-<a href="https://opencollective.com/lem#backers" target="_blank"><img src="https://opencollective.com/lem/backers.svg?width=890"></a>
-
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/lem#sponsor)]
-
-<a href="https://opencollective.com/lem/sponsor/0/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/1/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/2/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/3/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/4/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/5/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/6/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/7/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/8/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/lem/sponsor/9/website" target="_blank"><img src="https://opencollective.com/lem/sponsor/9/avatar.svg"></a>
-
-
+i want to add some new modifiers like Lux, Pico, and Nano.  and i want to try my hand at changing some things
 
 # License
 [MIT](https://github.com/lem-project/lem/blob/master/LICENCE)
