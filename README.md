@@ -3,7 +3,7 @@
 personal project, not fit for mass use
 
 ## check out LEM's official page
-[Official LEM Repo](https://https://github.com/lem-project/lem)
+[Official LEM Repo](https://github.com/lem-project/lem)
 
 ### reasons for my fork
 
