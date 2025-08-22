@@ -42,3 +42,6 @@ artifacts/
 
 .helix/recent-files.txt
 
+# Pijul stuff
+.ignore
+.pijul/
