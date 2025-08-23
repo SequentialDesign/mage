@@ -22,6 +22,7 @@ checklist for future plans
 - [ ] tweak some search stuff (which is amazing in LEM)
 - [ ] learn more about LEM.  this is really just something fun for me
 - [ ] change some command names to better reflect what they do
+- [ ] modify prompts to allow kill-whole-line and company without any monkey business
 
 ## License
 Same as LEM's : [MIT](https://github.com/lem-project/lem/blob/master/LICENCE)
