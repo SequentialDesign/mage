@@ -47,7 +47,6 @@ artifacts/
 .pijul/
 pijul-key.pub
 
-
 # Fossil stuff
 mage.fossil
 .fslckout
