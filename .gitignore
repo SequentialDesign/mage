@@ -52,3 +52,5 @@ mage.fossil
 .fslckout
 .fossil-settings
 
+# unknown stuff
+ls.out
