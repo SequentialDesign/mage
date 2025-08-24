@@ -1,7 +1,5 @@
 (in-package :lem-core)
 
-(defvar *active-modes*)
-
 (defstruct logical-line
   string
   attributes
@@ -286,9 +284,8 @@
 
 (defun call-do-logical-line (window function)
   (with-point ((point (window-view-point window)))
-    (let* ((overlays (get-window-overlays window))
-           (active-modes (get-active-modes-class-instance (window-buffer window)))
-           (*active-modes* active-modes))
+    (let ((overlays (get-window-overlays window))
+          (active-modes (get-active-modes-class-instance (window-buffer window))))
       (loop :for logical-line := (create-logical-line point overlays active-modes)
             :do (funcall function logical-line)
                 (unless (line-offset point 1)

@@ -99,7 +99,8 @@
     (unless buffer
       (editor-error "buffer does not exist: ~A" buffer-or-name))
     (when (cdr (buffer-list))
-      (delete-buffer buffer))))
+      (delete-buffer buffer)))
+  t)
 
 (define-command previous-buffer () ()
   "Switches to the previous buffer."

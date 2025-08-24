@@ -285,8 +285,7 @@
                #-os-windows "lem-terminal"
                "lem-legit"
                "lem-dashboard"
-               "lem-copilot"
-               "lem-claude-code"))
+               "lem-copilot"))
 
 (defsystem "lem"
   :version "2.3.0"

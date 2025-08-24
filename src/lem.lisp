@@ -120,8 +120,7 @@ See scripts/build-ncurses.lisp or scripts/build-sdl2.lisp"
              (if (command-line-arguments-debug args)
                  :debug
                  :info))))
-    (t
-     (log:config :sane :daily (merge-pathnames "debug.log" (lem-home)) :info)))
+    (t (log:config :off)))
 
   (log:info "Starting Lem")
 

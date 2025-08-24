@@ -289,9 +289,7 @@
           :do (render-line-with-caching window 0 y all-objects height)
               (incf y height)
               (setq left-side-objects (copy-list (compute-wrap-left-area-content
-                                                  *active-modes*
-                                                  left-side-width
-                                                  left-side-characters)))
+                                                  left-side-width left-side-characters)))
           :sum height)))
 
 (defun find-cursor-object (objects)
