@@ -1,5 +1,7 @@
 (in-package :lem-core)
 
+(defvar *active-modes*)
+
 (defstruct logical-line
   string
   attributes
@@ -46,11 +48,11 @@
   ;; under-attributes := ((start-charpos end-charpos attribute) ...)
   (let* ((over-attribute (ensure-attribute over-attribute))
          (under-part-attributes (lem/buffer/line:subseq-elements under-attributes
-                                                               over-start
-                                                               over-end))
+                                                                 over-start
+                                                                 over-end))
          (merged-attributes (lem/buffer/line:remove-elements under-attributes
-                                                           over-start
-                                                           over-end)))
+                                                             over-start
+                                                             over-end)))
     (flet ((add-element (start end attribute)
              (when (< start end)
                (push (list start end (ensure-attribute attribute))
@@ -254,9 +256,9 @@
   (let ((mark (cursor-mark cursor)))
     (when (mark-active-p mark)
       (list (make-overlay cursor
-                    (mark-point mark)
-                    'region
-                    :temporary t)))))
+                          (mark-point mark)
+                          'region
+                          :temporary t)))))
 
 (defun make-cursor-overlay* (point)
   (make-cursor-overlay
@@ -284,8 +286,9 @@
 
 (defun call-do-logical-line (window function)
   (with-point ((point (window-view-point window)))
-    (let ((overlays (get-window-overlays window))
-          (active-modes (get-active-modes-class-instance (window-buffer window))))
+    (let* ((overlays (get-window-overlays window))
+           (active-modes (get-active-modes-class-instance (window-buffer window)))
+           (*active-modes* active-modes))
       (loop :for logical-line := (create-logical-line point overlays active-modes)
             :do (funcall function logical-line)
                 (unless (line-offset point 1)
