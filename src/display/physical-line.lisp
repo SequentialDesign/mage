@@ -272,39 +272,64 @@
                          (char-type character)))
 
 (defun separate-objects-by-width (objects view-width buffer)
-  (flet ((explode-object (text-object)
-           (check-type text-object text-object)
+  (flet ((find-best-split-point (text-object available-width)
            (let* ((string (text-object-string text-object))
-                  (char-type (char-type (char string 0)))
-                  (n (floor (length string) 2)))
-             (loop :for part-string :in (list (subseq string 0 n)
-                                              (subseq string n))
-                   :unless (alexandria:emptyp part-string)
-                   :collect (make-object-with-type
-                             part-string
-                             (text-object-attribute text-object) char-type)))))
+                  (len (length string))
+                  (low 0) (high len) (best-fit-index 0))
+             (when (<= len 1) (return-from find-best-split-point 0))
+             (loop while (<= low high)
+                   for mid = (floor (+ low high) 2)
+                   do (if (zerop mid) (return)
+                          (let* ((sub-object (make-object-with-type
+                                              (subseq string 0 mid)
+                                              (text-object-attribute text-object)
+                                              (text-object-type text-object)))
+                                 (sub-width (object-width sub-object)))
+                            (if (<= sub-width available-width)
+                                (progn (setf best-fit-index mid) (setf low (1+ mid)))
+                                (setf high (1- mid))))))
+             best-fit-index)))
     (let ((wrap-line-character (variable-value 'wrap-line-character :default buffer))
           (wrap-line-attribute (variable-value 'wrap-line-attribute :default buffer)))
-      (loop
-        :until (null objects)
-        :collect (loop :with total-width := 0
-                       :and physical-line-objects := '()
-                       :for object := (pop objects)
-                       :while object
-                       :do (cond ((and (typep object 'text-object)
-                                       (<= view-width (+ total-width (object-width object))))
-                                  (cond ((< 1 (length (text-object-string object)))
-                                         (setf objects (nconc (explode-object object) objects)))
-                                        (t
-                                         (push object objects)
-                                         (push (make-letter-object wrap-line-character
-                                                                   wrap-line-attribute)
-                                               physical-line-objects)
-                                         (return (nreverse physical-line-objects)))))
-                                 (t
-                                  (incf total-width (object-width object))
-                                  (push object physical-line-objects)))
-                       :finally (return (nreverse physical-line-objects)))))))
+      (loop :until (null objects)
+            :collect
+               (loop :with total-width := 0
+                     :and physical-line-objects := '()
+                     :for object := (pop objects)
+                     :while object
+                     :do (cond
+                           ((and (typep object 'text-object)
+                                 (<= view-width (+ total-width (object-width object))))
+                            (let* ((available-width (- view-width total-width))
+                                   (split-point (find-best-split-point object available-width)))
+                              (if (> split-point 0)
+                                  (let* ((string (text-object-string object))
+                                         (fit-part (make-object-with-type
+                                                    (subseq string 0 split-point)
+                                                    (text-object-attribute object)
+                                                    (text-object-type object))))
+                                    ;; Add the part that fits to the current line.
+                                    (push fit-part physical-line-objects)
+                                 
+                                    ;; *** THE FIX IS HERE ***
+                                    ;; Only create and push a "rest-part" if there is actually
+                                    ;; a rest of the string left.
+                                    (when (< split-point (length string))
+                                      (let ((rest-part (make-object-with-type
+                                                        (subseq string split-point)
+                                                        (text-object-attribute object)
+                                                        (text-object-type object))))
+                                        (push rest-part objects))))
+                                  ;; If no part fits, the line is full.
+                                  (progn
+                                    (push object objects)
+                                    (push (make-letter-object wrap-line-character wrap-line-attribute)
+                                          physical-line-objects)
+                                    (return (nreverse physical-line-objects))))))
+                           (t
+                            (incf total-width (object-width object))
+                            (push object physical-line-objects)))
+                     :finally (return (nreverse physical-line-objects)))))))
 
 (defun render-line (view x y objects height)
   (lem-if:render-line (implementation) view x y objects height))
@@ -384,21 +409,36 @@
   (let* ((left-side-characters (loop :for obj :in left-side-objects
                                      :when (typep obj 'text-object)
                                      :sum (length (text-object-string obj))))
+         ;; 1. Get all the physical lines in one batch. This is correct.
          (objects-per-physical-line
            (separate-objects-by-width (create-drawing-objects logical-line)
                                       (- (window-view-width window) left-side-width)
-                                      (window-buffer window))))
-    (loop :for objects :in objects-per-physical-line
-          :for all-objects := (append left-side-objects objects)
-          :for height := (max-height-of-objects all-objects)
-          :do (render-line-with-caching window 0 y all-objects height)
-              (incf y height)
-              (setq left-side-objects 
-                    (copy-list (compute-wrap-left-area-content
-                                *active-modes* 
-                                left-side-width
-                                left-side-characters)))
-          :sum height)))
+                                      (window-buffer window)))
+         
+         ;; 2. Pre-calculate the content for the left side of WRAPPED lines.
+         ;;    This is only computed once and only if wrapping actually occurs.
+         (wrapped-left-side-objects
+           (when (> (length objects-per-physical-line) 1)
+             (compute-wrap-left-area-content
+              *active-modes*
+              left-side-width
+              left-side-characters))))
+
+    ;; 3. The main rendering loop, now with correct state management.
+    (loop
+      :for physical-line-objects :in objects-per-physical-line
+      
+      ;; This is the core of the fix. It declaratively handles the state.
+      :for current-left-side := left-side-objects      ; On the FIRST iteration, use the original left side.
+      :then wrapped-left-side-objects ; On ALL SUBSEQUENT iterations, use the wrapped version.
+      
+      :for all-objects := (append current-left-side physical-line-objects)
+      :for height := (max-height-of-objects all-objects)
+      
+      :do (render-line-with-caching window 0 y all-objects height)
+          (incf y height)
+          
+      :sum height)))
 
 (defun find-cursor-object (objects)
   (loop :for object :in objects
