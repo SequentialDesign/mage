@@ -2,7 +2,9 @@
   (:use :cl :lem)
   (:export :write-header
            :get-focus-item
-           :apply-print-spec)
+           :apply-print-spec
+           :popup-menu-attribute
+           :non-focus-popup-menu-attribute)
   #+sbcl
   (:lock t))
 (in-package :lem/popup-menu)

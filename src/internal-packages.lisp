@@ -378,6 +378,10 @@
    :delete-leftside-window
    :make-rightside-window
    :delete-rightside-window)
+  ;; popup-menu.lisp
+  (:export
+   :popup-menu-attribute
+   :non-focus-popup-menu-attribute)
   ;; popup.lisp
   (:export
    :*default-popup-message-timeout*
