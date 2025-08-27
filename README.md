@@ -23,6 +23,7 @@ checklist for future plans
 - [ ] learn more about LEM.  this is really just something fun for me
 - [ ] change some command names to better reflect what they do
 - [ ] make prompts "smarter", making them start where the user can input text
+- [ ] make kill commands copy text even in read-only mode
 
 ## License
 Same as LEM's : [MIT](https://github.com/lem-project/lem/blob/master/LICENCE)
